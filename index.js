@@ -19,7 +19,7 @@ const swDefaultConfig = {
 
 const hash = ctx => crypto.createHash('md5').update(ctx, 'utf8').digest('hex')
 
-class WorkboxNextWebpackPlugin {
+class NextWorkboxWebpackPlugin {
   constructor(swConfig, options) {
     this.swConfig = {
       ...swDefaultConfig,
