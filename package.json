@@ -14,8 +14,7 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"build": "rm -rf dist && microbundle -f umd --name xxx",
-		"test": "xo && ava"
+		"build": "rm -rf dist && microbundle -f umd --name xxx"
 	},
 	"files": [
 		"dist"
