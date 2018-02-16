@@ -1,9 +1,9 @@
 {
-	"name": "next-workbox-webpack-plugin",
+	"name": "@pwa/next-workbox-webpack-plugin",
 	"version": "0.1.0",
 	"description": "Webpack plugin for next with workbox",
 	"license": "MIT",
-	"repository": "@pwa/next-workbox-webpack-plugin",
+	"repository": "ragingwind/next-workbox-webpack-plugin",
 	"author": {
 		"name": "Jimmy Moon",
 		"email": "ragingwind@gmail.com",
