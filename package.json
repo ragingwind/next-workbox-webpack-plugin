@@ -27,6 +27,6 @@
 	},
 	"dependencies": {
 		"md5-file": "^3.2.3",
-		"workbox-build": "^2.1.2"
+		"workbox-build": "^3.0.0-beta.0"
 	}
 }

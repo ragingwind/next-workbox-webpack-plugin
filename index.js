@@ -57,7 +57,7 @@ class NextWorkboxWebpackPlugin {
 
   async importWorkboxLibraries(swImportWorkboxFrom, swDestDir) {
     if (swImportWorkboxFrom === 'local') {
-      const workboxSwJs = path.basename(require(`./node_modules/workbox-sw/package.json`).main)
+      const workboxSwJs = path.basename(require(`${process.cwd()}/node_modules/workbox-sw/package.json`).main)
       return `/workbox/${await copyWorkboxLibraries(swDestDir)}/${workboxSwJs}`
     } else {
       return getModuleUrl('workbox-sw')
