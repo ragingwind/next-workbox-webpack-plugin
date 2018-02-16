@@ -10,6 +10,9 @@
 		"url": "ragingwind.me"
 	},
 	"main": "index.js",
+	"bin": {
+		"next-workbox-server": "server.js"
+	},
 	"engines": {
 		"node": ">=6"
 	},
@@ -17,7 +20,8 @@
 		"build": "rm -rf dist && microbundle -f umd --name xxx"
 	},
 	"files": [
-		"dist"
+		"index.js",
+		"server.js"
 	],
 	"keywords": [
 		"next",
@@ -29,5 +33,8 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"md5-file": "^3.2.3",
+		"workbox-build": "^2.1.2"
+	}
 }
