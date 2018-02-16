@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const crypto = require('crypto')
 const md5File = require('md5-file/promise').sync
-
 const {generateSWString, copyWorkboxLibraries, getModuleUrl} = require('workbox-build')
 
 const swDefaultConfig = {
@@ -17,7 +16,7 @@ const swDefaultConfig = {
     urlPattern: /_next/,
     handler: 'staleWhileRevalidate'
   }],
-  swDest: './static/workbox/sw.js',
+  swDest: '.next/workbox/sw.js',
   importScripts: [],
   importWorkboxFrom: 'local'
 }
@@ -31,16 +30,13 @@ class NextWorkboxWebpackPlugin {
     const distDir = path.join(options.dir, options.config.distDir)
     this.cacheQuery = [{
       src: `${distDir}/bundles/pages`,
-      // route: f => `/_next/${options.buildId}/page/${f}`,
-      route: f => `/_next/${options.buildId}/page/${f.replace('.js', '')}`,
+      route: f => `/_next/${options.buildId}/page/${f}`,
       filter: f => f
-      // filter: f => f !== 'index.js'
     }, {
       src: `${distDir}/chunks`,
       route: f => `/_next/webpack/chunks/${f}`,
       filter: f => f
     }, {
-      // http://localhost:3000/_next/ba2e11cb0e2da3472017226bbcf2042d/app.js
       src: `${distDir}`,
       route: f => `/_next/${md5File(`${distDir}/app.js`)}/app.js`,
       filter: f => f === 'app.js'
