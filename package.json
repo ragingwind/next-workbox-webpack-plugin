@@ -9,19 +9,11 @@
 		"email": "ragingwind@gmail.com",
 		"url": "ragingwind.me"
 	},
-	"main": "index.js",
-	"bin": {
-		"next-workbox-server": "server.js"
-	},
 	"engines": {
 		"node": ">=6"
 	},
-	"scripts": {
-		"build": "rm -rf dist && microbundle -f umd --name xxx"
-	},
 	"files": [
-		"index.js",
-		"server.js"
+		"index.js"
 	],
 	"keywords": [
 		"next",
