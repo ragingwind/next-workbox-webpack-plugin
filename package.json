@@ -1,0 +1,34 @@
+{
+	"name": "next-workbox-webpack-plugin",
+	"version": "0.0.0",
+	"description": "Webpack plugin for next with workbox",
+	"license": "MIT",
+	"repository": "@pwa/next-workbox-webpack-plugin",
+	"author": {
+		"name": "Jimmy Moon",
+		"email": "ragingwind@gmail.com",
+		"url": "ragingwind.me"
+	},
+	"main": "index.js",
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"build": "rm -rf dist && microbundle -f umd --name xxx",
+		"test": "xo && ava"
+	},
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"next",
+		"next-workbox",
+		"workbox",
+		"pwa",
+		"progressive web app"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {}
+}
