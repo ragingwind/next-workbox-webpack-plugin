@@ -1,10 +1,12 @@
-const fs = require('fs')
 const path = require('path')
+const fs = require('fs-extra')
 const crypto = require('crypto')
 const md5File = require('md5-file/promise').sync
 const {generateSWString, copyWorkboxLibraries, getModuleUrl} = require('workbox-build')
 
-const swDefaultConfig = {
+const hash = ctx => crypto.createHash('md5').update(ctx, 'utf8').digest('hex')
+
+const defaultConfig = {
   globDirectory: './',
   globPatterns: [],
   clientsClaim: true,
@@ -14,25 +16,60 @@ const swDefaultConfig = {
     handler: 'staleWhileRevalidate'
   }],
   importScripts: [],
-  importWorkboxFrom: 'local'
+  distDir: '.next',
+  importWorkboxFrom: 'local',
+  precacheManifest: true,
+  removeDir: true,
+  buildId: null,
+  uniqueId: false
 }
 
-const hash = ctx => crypto.createHash('md5').update(ctx, 'utf8').digest('hex')
-
 class NextWorkboxWebpackPlugin {
-  constructor(swConfig, options) {
-    this.swConfig = {
-      ...swDefaultConfig,
-      ...swConfig,
-      ...{
-        swDest: '.next/workbox/sw.js'
-      }
+  constructor(config) {
+    const {
+      distDir,
+      importWorkboxFrom,
+      precacheManifest,
+      removeDir,
+      buildId,
+      uniqueId,
+      ...swConfig
+    } = {
+      ...defaultConfig,
+      ...config,
+      swDest: config.swDest ? path.basename(config.swDest) : 'sw.js'
     }
 
-    const distDir = path.join(options.dir, options.config.distDir)
-    this.cacheQuery = [{
+    this.swConfig = swConfig
+    this.options = {
+      distDir,
+      importWorkboxFrom,
+      precacheManifest,
+      removeDir,
+      buildId,
+      // dedicated path and url, must be under static in next.js to export and refer to it
+      swDestRoot: './static/workbox',
+      swURLRoot: '/static/workbox'
+    }
+    
+    if (!this.options.buildId) {
+      throw 'Build id from next.js must be exist'
+    }
+  }
+
+  async importWorkboxLibraries({importWorkboxFrom, swURLRoot, swDestRoot}) {
+    if (this.options.importWorkboxFrom === 'local') {
+      const wbjsFilename = path.basename(require(`${process.cwd()}/node_modules/workbox-sw/package.json`).main)
+      return `${swURLRoot}/${await copyWorkboxLibraries(swDestRoot)}/${wbjsFilename}`
+    } else {
+      return getModuleUrl('workbox-sw')
+    }
+  }
+  
+  globPrecacheManifest({distDir, buildId}) {
+    const precacheQuery = [{
       src: `${distDir}/bundles/pages`,
-      route: f => `/_next/${options.buildId}/page/${f}`,
+      route: f => `/_next/${buildId}/page/${f}`,
       filter: f => (/.js$/).test(f)
     }, {
       src: `${distDir}/chunks`,
@@ -43,10 +80,8 @@ class NextWorkboxWebpackPlugin {
       route: f => `/_next/${md5File(`${distDir}/app.js`)}/app.js`,
       filter: f => f === 'app.js'
     }]
-  }
 
-  cacheManifest() {
-    return Promise.all(this.cacheQuery.map(query => {
+    return Promise.all(precacheQuery.map(query => {
       return new Promise(resolve => {
         fs.readdir(query.src, (err, files = []) => {
           resolve(files.filter(query.filter).map(f => query.route(f)))
@@ -55,13 +90,23 @@ class NextWorkboxWebpackPlugin {
     })).then(files => files.reduce((c, p) => c.concat(p), []))
   }
 
-  async importWorkboxLibraries(swImportWorkboxFrom, swDestDir) {
-    if (swImportWorkboxFrom === 'local') {
-      const workboxSwJs = path.basename(require(`${process.cwd()}/node_modules/workbox-sw/package.json`).main)
-      return `/workbox/${await copyWorkboxLibraries(swDestDir)}/${workboxSwJs}`
-    } else {
-      return getModuleUrl('workbox-sw')
-    }
+  async importPrecacheManifest({swDestRoot, swURLRoot}) {
+    const manifest = await this.globPrecacheManifest(this.options)
+    const context = `self.__precacheManifest = ${JSON.stringify(manifest)}`
+    const output = `next-precache-manifest-${hash(context)}.js`
+
+    // dump out precached manifest for next pages, chunks
+    fs.writeFileSync(path.join(swDestRoot, output), context)
+    
+    return `${swURLRoot}/${output}`
+  }
+
+  async generateSW(swDest, swConfig) {
+    fs.writeFileSync(swDest, await generateSWString(swConfig))
+  }
+
+  removeWorkboxDir({swDestRoot}) {
+    fs.removeSync(path.resolve(process.cwd(), swDestRoot))
   }
 
   apply(compiler) {
@@ -71,27 +116,18 @@ class NextWorkboxWebpackPlugin {
       }
 
       try {
-        const {
-          swDest,
-          importWorkboxFrom,
-          ...swConfig
-        } = this.swConfig
+        const {swDest, ...swConfig} = this.swConfig
 
-        const swDestRoot = path.dirname(swDest)
-        const swLibs = await this.importWorkboxLibraries(importWorkboxFrom, swDestRoot)
-        const precacheManifest = `self.__precacheManifest = ${JSON.stringify(await this.cacheManifest())}`
-        const nextPrecaheManifest = `next-precache-manifest-${hash(precacheManifest)}.js`
+        if (this.options.removeDir) {
+          this.removeWorkboxDir(this.options)
+        }
+        
+        swConfig.importScripts.unshift(await this.importWorkboxLibraries(this.options))
+        if (this.options.precacheManifest) {
+          swConfig.importScripts.push(await this.importPrecacheManifest(this.options))
+        }
 
-        // dump out precached manifest for next pages, chunks
-        fs.writeFileSync(path.join(swDestRoot, nextPrecaheManifest), precacheManifest)
-
-        // write service worker script
-        fs.writeFileSync(swDest, await generateSWString({
-          ...swConfig, 
-          ...{
-            importScripts: swConfig.importScripts.concat([swLibs, `/workbox/${nextPrecaheManifest}`])
-          }
-        }))
+        await this.generateSW(path.join(this.options.swDestRoot, swDest), swConfig)
       } catch (e) {
         console.error(e)
       }
