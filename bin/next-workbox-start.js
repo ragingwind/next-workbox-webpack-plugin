@@ -14,8 +14,8 @@ app.prepare().then(() => {
     if (req.url.startsWith('/sw')) {
       app.serveStatic(req, res, join(root, `./static/workbox/${req.url}`))
     }
-    else if (req.url.startsWith('/workbox/')) {
-      app.serveStatic(req, res, join(root, './static', req.url))
+    else if (req.url.startsWith('/static/workbox/')) {
+      app.serveStatic(req, res, join(root, `.${req.url}`))
     } else {
       handle(req, res, req.url)
     }
