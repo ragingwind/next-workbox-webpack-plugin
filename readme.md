@@ -32,6 +32,25 @@ nextWorkboxWebpackPlugin({
 });
 ```
 
+## Usage in next.config.js
+
+```
+const nextWorkboxWebpackPlugin = require('@pwa/next-workbox-webpack-plugin');
+
+module.exports = {
+  webpack: (config, {isServer, buildId, config: {distDir}}) => {
+    if (!isServer) {
+      config.plugins.push(new NextWorkboxWebpackPlugin({
+        distDir,
+        buildId
+      }))
+    }
+
+    return config
+  }
+}
+```
+
 ## How it works
 
 For Next.js, It contains some of restrictions:
