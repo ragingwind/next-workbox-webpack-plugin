@@ -1,0 +1,9 @@
+{
+  "name": "hello-pwa",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "next build",
+    "export": "next export",
+    "start": "node ../../bin/next-workbox-start --port=8080"
+  }
+}
