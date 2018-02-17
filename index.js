@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const crypto = require('crypto')
 const md5File = require('md5-file/promise').sync
+const findUp = require('find-up')
 const {generateSWString, copyWorkboxLibraries, getModuleUrl} = require('workbox-build')
 
 const hash = ctx => crypto.createHash('md5').update(ctx, 'utf8').digest('hex')
@@ -59,8 +60,13 @@ class NextWorkboxWebpackPlugin {
 
   async importWorkboxLibraries({importWorkboxFrom, swURLRoot, swDestRoot}) {
     if (this.options.importWorkboxFrom === 'local') {
-      const wbjsFilename = path.basename(require(`${process.cwd()}/node_modules/workbox-sw/package.json`).main)
-      return `${swURLRoot}/${await copyWorkboxLibraries(swDestRoot)}/${wbjsFilename}`
+      try {
+        const workboxPkg = findUp.sync('node_modules/workbox-sw/package.json', __dirname)
+        const workboxName = path.basename(require(workboxPkg).main)
+        return `${swURLRoot}/${await copyWorkboxLibraries(swDestRoot)}/${workboxName}`
+      } catch (e) {
+        throw e
+      }
     } else {
       return getModuleUrl('workbox-sw')
     }
