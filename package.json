@@ -13,8 +13,12 @@
 		"node": ">=6"
 	},
 	"files": [
-		"index.js"
+		"index.js",
+		"bin"
 	],
+	"bin": {
+		"next-workbox-start": "bin/next-workbox-start.js"
+	},
 	"keywords": [
 		"next",
 		"next-workbox",
