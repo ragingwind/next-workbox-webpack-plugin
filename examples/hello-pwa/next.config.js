@@ -2,7 +2,7 @@ const NextWorkboxWebpackPlugin = require('../../index')
 
 module.exports = {
   webpack: (config, {isServer, buildId, config: {distDir}}) => {
-    if (!isServer) {
+    if (!isServer && !dev) {
       config.plugins.push(new NextWorkboxWebpackPlugin({
         distDir,
         buildId
