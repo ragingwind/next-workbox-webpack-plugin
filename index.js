@@ -53,8 +53,14 @@ class NextWorkboxWebpackPlugin {
       swURLRoot: '/static/workbox'
     }
     
+    // build id come from next.js is exist
     if (!this.options.buildId) {
       throw 'Build id from next.js must be exist'
+    }
+
+    // clean up previous builts
+    if (this.options.removeDir) {
+      this.removeWorkboxDir(this.options)
     }
   }
 
@@ -123,12 +129,11 @@ class NextWorkboxWebpackPlugin {
 
       try {
         const {swDest, ...swConfig} = this.swConfig
-
-        if (this.options.removeDir) {
-          this.removeWorkboxDir(this.options)
-        }
         
+        // unshift workbox libs to the top of scripts
         swConfig.importScripts.unshift(await this.importWorkboxLibraries(this.options))
+
+        // push precached manifest to end of scripts
         if (this.options.precacheManifest) {
           swConfig.importScripts.push(await this.importPrecacheManifest(this.options))
         }
