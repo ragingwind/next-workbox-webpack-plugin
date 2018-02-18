@@ -70,6 +70,11 @@ static/workbox
 - You have to [add register service worker script](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/examples/hello-pwa/pages/index.js) into part of your application
 - For more information, please refer to test and [Get Started With Workbox For Webpack](https://goo.gl/BFQxuo)
 
+### Examples
+
+- [Hello PWA](https://github.com/ragingwind/next-workbox-webpack-plugin/tree/master/examples/hello-pwa): You can learn how to use the webpack plugin basically
+- [HNPWA](https://github.com/ragingwind/next-workbox-webpack-plugin/tree/master/examples/hnpwa): Simple HNPWA apps with Next.js
+
 ## License
 
 MIT © [Jimmy Moon](https://ragingwind.me)
