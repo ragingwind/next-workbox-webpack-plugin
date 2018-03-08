@@ -1,6 +1,6 @@
 {
 	"name": "next-workbox-webpack-plugin",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Webpack plugin for next with workbox",
 	"license": "MIT",
 	"repository": "ragingwind/next-workbox-webpack-plugin",
