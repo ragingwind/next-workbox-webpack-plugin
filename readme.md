@@ -7,7 +7,7 @@
 ## Install
 
 ```
-$ npm install @pwa/next-workbox-webpack-plugin
+$ npm install next-workbox-webpack-plugin
 ```
 
 ## Usage
