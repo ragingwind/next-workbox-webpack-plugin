@@ -7,7 +7,7 @@
 	"author": {
 		"name": "Jimmy Moon",
 		"email": "ragingwind@gmail.com",
-		"url": "ragingwind.me"
+		"url": "https://ragingwind.me"
 	},
 	"engines": {
 		"node": ">=6"
