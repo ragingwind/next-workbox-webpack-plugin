@@ -29,7 +29,7 @@
 	"dependencies": {
 		"find-up": "^2.1.0",
 		"md5-file": "^3.2.3",
-		"workbox-build": "^3.0.0-beta.0"
+		"workbox-build": "^3.0.0-beta.2"
 	},
 	"devDependencies": {
 		"next": "^5.0.0",

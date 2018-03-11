@@ -52,7 +52,7 @@ class NextWorkboxWebpackPlugin {
       swDestRoot: './static/workbox',
       swURLRoot: '/static/workbox'
     }
-    
+
     // build id come from next.js is exist
     if (!this.options.buildId) {
       throw 'Build id from next.js must be exist'
@@ -77,7 +77,7 @@ class NextWorkboxWebpackPlugin {
       return getModuleUrl('workbox-sw')
     }
   }
-  
+
   globPrecacheManifest({distDir, buildId}) {
     const precacheQuery = [{
       src: `${distDir}/bundles/pages`,
@@ -109,12 +109,13 @@ class NextWorkboxWebpackPlugin {
 
     // dump out precached manifest for next pages, chunks
     fs.writeFileSync(path.join(swDestRoot, output), context)
-    
+
     return `${swURLRoot}/${output}`
   }
 
   async generateSW(swDest, swConfig) {
-    fs.writeFileSync(swDest, await generateSWString(swConfig))
+		const {swString} = await generateSWString(swConfig)
+    fs.writeFileSync(swDest, swString)
   }
 
   removeWorkboxDir({swDestRoot}) {
@@ -129,7 +130,7 @@ class NextWorkboxWebpackPlugin {
 
       try {
         const {swDest, ...swConfig} = this.swConfig
-        
+
         // unshift workbox libs to the top of scripts
         swConfig.importScripts.unshift(await this.importWorkboxLibraries(this.options))
 
