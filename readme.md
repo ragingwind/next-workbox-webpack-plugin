@@ -13,7 +13,7 @@ $ npm install next-workbox-webpack-plugin
 ## Usage
 
 ```js
-const nextWorkboxWebpackPlugin = require('@pwa/next-workbox-webpack-plugin');
+const nextWorkboxWebpackPlugin = require('next-workbox-webpack-plugin');
 
 nextWorkboxWebpackPlugin({
   // must, you can get it at time time of Next.js compiling
@@ -35,7 +35,7 @@ nextWorkboxWebpackPlugin({
 ## Usage in next.config.js
 
 ```
-const NextWorkboxWebpackPlugin = require('@pwa/next-workbox-webpack-plugin');
+const NextWorkboxWebpackPlugin = require('next-workbox-webpack-plugin');
 
 module.exports = {
   webpack: (config, {isServer, dev, buildId, config: {distDir}}) => {
