@@ -1,0 +1,17 @@
+{
+  "name": "hello-pwa",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "next build",
+    "export": "next export",
+    "start": "node ../../bin/server --port=8080"
+  },
+  "dependencies": {
+    "next": "^9.0.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "next-workbox-webpack-plugin": "latest"
+  }
+}
