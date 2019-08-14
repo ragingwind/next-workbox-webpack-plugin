@@ -77,7 +77,51 @@ static/workbox
 
 ### Now 2.0
 
-[TBD]
+To use this plugin on now 2.0, you should have more work below
+
+1. Using fixed build id with `generateBuildId`. It will be used at path of sw asserts
+2. Set fixed path for sw assets. one is `swDestRoot`, another is `swURLRoot`. For service sw.js and manifest on now 2.0, we have to put those of files under `.next` as a part of app
+
+```
+const NextWorkboxWebpackPlugin = require('next-workbox-webpack-plugin');
+
+module.exports = {
+	webpack: (config, { isServer, dev, buildId, config: { distDir } }) => {
+		if (!isServer && !dev) {
+			config.plugins.push(
+        new NextWorkboxWebpackPlugin({
+          importWorkboxFrom: 'cdn',
+          distDir,
+          buildId,
+          // destination root for sw assets, sw.js
+          swDestRoot: '.next/static/my-build-id/pages',
+          // root url for sw.js
+          swURLRoot: '_next/static/my-build-id/pages'
+        })
+      );
+    }
+		return config;
+  },
+  generateBuildId: async () => {
+    return 'my-build-id'
+  }
+};
+```
+
+3. Update your routes for sw.js
+
+```
+{
+	"version": 2,
+	"routes": [{ "src": "/sw.js", "dest": "_next/static/my-build-id/pages/sw.js" }],
+	"builds": [{ "src": "next.config.js", "use": "@now/next" }]
+}
+```
+
+4. type `now`,  and congrats!
+
+<img width="1424" alt="" src="https://user-images.githubusercontent.com/124117/63063243-cf62ab00-bf36-11e9-8d46-8835af16162f.png">
+
 
 ### Examples
 
