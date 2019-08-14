@@ -7,7 +7,7 @@
 ## Install
 
 ```
-$ npm install next-workbox-webpack-plugin
+$ npm install -d next-workbox-webpack-plugin
 ```
 
 ## Usage
@@ -16,8 +16,8 @@ $ npm install next-workbox-webpack-plugin
 const nextWorkboxWebpackPlugin = require('next-workbox-webpack-plugin');
 
 nextWorkboxWebpackPlugin({
-  // must, you can get it at time time of Next.js compiling
-  buildId: '6c071eb6-ab01-47bc-8074-71057afc1f64',
+  // must, see next.config.js below
+  buildId,
   // optional, next.js dist path as compiling. most of cases you don't need to fix it.
   distDir: '.next',
   // optional, which version of workbox will be used in between 'local' or 'cdn'. 'local'
@@ -53,11 +53,13 @@ module.exports = {
 
 ## How it works
 
-For Next.js, It contains some of restrictions:
+### Custom Server
 
-- Only works in `not dev mode` and on `the custom server` which means you can't test with `next` and `next start`
-- You need customized server for serving service worker scripts and workbox libraries. For your convenience, [test server is in this package](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/bin/next-workbox-start.js).
-- All of files will be generated in `static/workbox` because of exporting. You might need to add the path to gitignore.
+- Only works in `NOT dev mode`. You can't test with `next` and `next start`
+- To serve `sw.js`, you need custom server with custom route. See [test server is in this package](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/example/hello-pwa/server.js).
+- You have to [add script of registering service worker](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/examples/hello-pwa/pages/index.js) into part of your application
+- All of files will be generated under `/static/workbox` because of exporting. You might need to add the path to gitignore.
+
 ```
 static/workbox
 ├── next-precache-manifest-d42167a04499e1887dad3156b93e064d.js
@@ -67,8 +69,11 @@ static/workbox
     ├── ...
     ├── workbox-sw.js
 ```
-- You have to [add register service worker script](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/examples/hello-pwa/pages/index.js) into part of your application
 - For more information, please refer to test and [Get Started With Workbox For Webpack](https://goo.gl/BFQxuo)
+
+### Now 2.0
+
+[TBD]
 
 ### Examples
 

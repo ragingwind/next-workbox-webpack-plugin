@@ -14,7 +14,7 @@ const defaultConfig = {
   skipWaiting: true,
   runtimeCaching: [{
     urlPattern: /^http[s|]?.*/,
-    handler: 'staleWhileRevalidate'
+    handler: 'StaleWhileRevalidate'
   }],
   importScripts: [],
   distDir: '.next',
@@ -79,19 +79,23 @@ class NextWorkboxWebpackPlugin {
   }
 
   globPrecacheManifest({distDir, buildId}) {
-    const precacheQuery = [{
-      src: `${distDir}/bundles/pages`,
-      route: f => `/_next/${buildId}/page/${f}`,
-      filter: f => (/.js$/).test(f)
-    }, {
-      src: `${distDir}/chunks`,
-      route: f => `/_next/webpack/chunks/${f}`,
-      filter: f => (/.js$/).test(f)
-    }, {
-      src: `${distDir}`,
-      route: f => `/_next/${md5File(`${distDir}/app.js`)}/app.js`,
-      filter: f => f === 'app.js'
-    }]
+    const precacheQuery = [
+			{
+				src: `${distDir}/static/runtime`,
+				route: f => `/_next/static/runtime/${f}`,
+				filter: f => /.js$/.test(f)
+			},
+			{
+				src: `${distDir}/static/chunks`,
+				route: f => `/_next/static/chunks/${f}`,
+				filter: f => /.js$/.test(f)
+			},
+			{
+				src: `${distDir}/static/${buildId}/pages`,
+				route: f => `/_next/static/${buildId}/pages/${f}`,
+				filter: f => f === '_app.js' || f === 'index.js'
+			}
+		];
 
     return Promise.all(precacheQuery.map(query => {
       return new Promise(resolve => {

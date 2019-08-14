@@ -9,15 +9,12 @@
 		"email": "ragingwind@gmail.com",
 		"url": "https://ragingwind.me"
 	},
-	"engines": {
-		"node": ">=6"
-	},
 	"files": [
 		"index.js",
 		"bin"
 	],
 	"bin": {
-		"next-workbox-start": "bin/next-workbox-start.js"
+		"next-workbox-start": "bin/server.js"
 	},
 	"keywords": [
 		"next",
@@ -29,11 +26,11 @@
 	"dependencies": {
 		"find-up": "^2.1.0",
 		"md5-file": "^3.2.3",
-		"workbox-build": "^3.0.0-beta.2"
+		"workbox-build": "^4.3.1"
 	},
 	"devDependencies": {
-		"next": "^5.0.0",
-		"react": "^16.2.0",
-		"react-dom": "^16.2.0"
+		"next": "^9.0.3",
+		"react": "^16.9.0",
+		"react-dom": "^16.9.0"
 	}
 }
