@@ -1,7 +1,0 @@
-{
-	"version": 2,
-	"name": "next-manifest",
-	"alias": ["next-workbox-webpack-plugin.now.sh"],
-	"routes": [{ "src": "/sw.js", "dest": "/static/sw.js" }],
-	"builds": [{ "src": "next.config.js", "use": "@now/next" }]
-}
