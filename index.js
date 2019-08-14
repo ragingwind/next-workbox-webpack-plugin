@@ -60,7 +60,6 @@ class NextWorkboxWebpackPlugin {
       precacheManifest,
       removeDir,
       buildId,
-      // dedicated path and url, must be under static in next.js to export and refer to it
       swDestRoot: swDestRoot || './static/workbox',
       swURLRoot: swURLRoot || '/static/workbox'
     };
