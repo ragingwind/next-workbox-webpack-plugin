@@ -35,6 +35,7 @@ nextWorkboxWebpackPlugin({
   ...WorkboxBuildOptions,
 });
 ```
+Visit [workbox-build page](https://developers.google.com/web/tools/workbox/modules/workbox-build) for more information.
 
 ## Usage in next.config.js
 
