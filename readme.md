@@ -61,7 +61,7 @@ module.exports = {
 ### Custom Server
 
 - Only works in `NOT dev mode`. You can't test with `next` and `next start`
-- To serve `sw.js`, you need custom server with custom route. See [test server is in this package](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/example/hello-pwa/server.js).
+- To serve `sw.js`, you need [custom server with custom route](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/bin/server.js)
 - You have to [add script of registering service worker](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/examples/hello-pwa/pages/index.js) into part of your application
 - All of files will be generated under `/static/workbox` because of exporting. You might need to add the path to gitignore.
 
